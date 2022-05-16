@@ -4,6 +4,6 @@ import { admin } from '../middlewares/authMiddleware.js'
 
 const router = express.Router()
 
-router.route('/login', authAdmin)
+router.post('/login', authAdmin)
 
 export default router
