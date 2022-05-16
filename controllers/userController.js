@@ -83,4 +83,18 @@ const getUserById = asyncHandler(async (req, res) => {
   }
 })
 
-export { authUser, registerUser, getUsers, getUserById }
+// @desc Approve user
+// @route POST /api/users/:id/approve
+// @access Private/Admin
+const approveUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id).select('-password')
+
+  if (user) {
+    // TODO: update user
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+
+export { authUser, registerUser, getUsers, getUserById, approveUser }
