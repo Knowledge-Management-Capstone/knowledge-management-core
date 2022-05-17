@@ -11,6 +11,11 @@ const authUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email })
 
   if (user && user.matchPassword(password)) {
+    if (!user.isApproved) {
+      res.status(403)
+      throw new Error('User not activated')
+    }
+
     res.json({
       _id: user._id,
       accountType: user.accountType,
@@ -20,6 +25,7 @@ const authUser = asyncHandler(async (req, res) => {
       major: user.major,
       userId: user.userId,
       isAdmin: user.isAdmin,
+      isApproved: user.isApproved,
       token: generateToken(user._id)
     })
   } else {
@@ -53,6 +59,7 @@ const registerUser = asyncHandler(async (req, res) => {
       major: user.major,
       userId: user.userId,
       isAdmin: user.isAdmin,
+      isApproved: user.isApproved,
       token: generateToken(user._id)
     })
   } else {
