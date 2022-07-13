@@ -1,9 +1,9 @@
 import asyncHandler from 'express-async-handler'
-import Repository from '../models/repositoryModel'
-import Team from '../models/teamModel'
+import Repository from '../models/repositoryModel.js'
+import Team from '../models/teamModel.js'
 
 // @desc Create Repository
-// @route POST /api/repository/create
+// @route POST /api/repository
 // @access Private/User
 const createRepository = asyncHandler(async (req, res) => {
   const { teamId, ...data } = req.body
