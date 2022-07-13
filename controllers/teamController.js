@@ -34,4 +34,18 @@ const approveTeam = asyncHandler(async (req, res) => {
   res.status(200).json(approvedTeam)
 })
 
-export { createTeam, approveTeam }
+// @desc GetTeamById
+// @route GET /api/team/:id
+// @access Private/User
+const getTeamById = asyncHandler(async (req, res) => {
+  const team = await Team.findById(req.params.id)
+
+  if (!team) {
+    res.status(404)
+    throw new Error('Team not found')
+  }
+
+  res.status(200).json(team)
+})
+
+export { createTeam, approveTeam, getTeamById }
