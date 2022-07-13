@@ -34,7 +34,15 @@ const approveTeam = asyncHandler(async (req, res) => {
   res.status(200).json(approvedTeam)
 })
 
-// @desc GetTeamById
+// @desc Get All Team
+// @route GET /api/team
+// @access Private/Admin
+const getTeams = asyncHandler(async (req, res) => {
+  const teams = await Team.find({})
+  res.status(200).json(teams)
+})
+
+// @desc Get Team by Id
 // @route GET /api/team/:id
 // @access Private/User
 const getTeamById = asyncHandler(async (req, res) => {
@@ -48,4 +56,4 @@ const getTeamById = asyncHandler(async (req, res) => {
   res.status(200).json(team)
 })
 
-export { createTeam, approveTeam, getTeamById }
+export { createTeam, approveTeam, getTeamById, getTeams }
