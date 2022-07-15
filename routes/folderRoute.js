@@ -11,7 +11,7 @@ const router = express.Router()
 
 router.route('/').post(protect, createFolder)
 router
-  .route('/id')
+  .route('/:id')
   .get(protect, getAllChildrenById)
   .put(protect, updateFolder)
   .delete(protect, deleteFolder)
