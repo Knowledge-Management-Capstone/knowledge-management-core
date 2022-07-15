@@ -45,6 +45,9 @@ const getAllChildrenById = asyncHandler(async (req, res) => {
   res.status(200).json(children)
 })
 
+// @desc Update Folder by Id
+// @route PUT /api/folder/:id
+// @access Private/User
 const updateFolder = asyncHandler(async (req, res) => {
   const folder = await Folder.findById(req.params.id)
   const { title, description } = req.body
