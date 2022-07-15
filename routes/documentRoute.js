@@ -9,3 +9,5 @@ const router = express.Router()
 
 router.route('/').post(protect, createDocument)
 router.route('/:id').get(protect, getDocumentById)
+
+export default router
