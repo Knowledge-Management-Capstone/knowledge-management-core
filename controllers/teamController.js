@@ -75,7 +75,7 @@ const updateTeam = asyncHandler(async (req, res) => {
 })
 
 // @desc Add Member to Team
-// @route PUT /api/document/:id/add
+// @route PUT /api/team/:id/add
 // @access Private/User
 const addMember = asyncHandler(async (req, res) => {
   const userId = req.body.userId
