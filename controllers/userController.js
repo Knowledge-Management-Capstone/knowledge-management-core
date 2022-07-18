@@ -154,7 +154,9 @@ const searchUser = asyncHandler(async (req, res) => {
   const foundUser = await User.find({
     email: new RegExp(email),
     isAdmin: { $eq: false }
-  }).limit(10)
+  })
+    .select('_id name email')
+    .limit(10)
 
   res.status(200).json(foundUser)
 })
