@@ -162,6 +162,8 @@ const searchUser = asyncHandler(async (req, res) => {
 })
 
 // @desc Get all teams by User id
+// @route GET /api/user/:id/team
+// @access Private/User
 const getTeamsByUserId = asyncHandler(async (req, res) => {
   const { teams } = await User.findById(req.params.id)
     .populate({
