@@ -19,7 +19,7 @@
     "accountType": "lecturer",
     "password": "lectuter",
     "isAdmin": false,
-    "isApproved": false
+    "isApproved": true
   },
   {
     "fullName": "Dian Rahmaji",
@@ -30,6 +30,6 @@
     "accountType": "student",
     "password": "dianrahmaji",
     "isAdmin": false,
-    "isApproved": false
+    "isApproved": true
   }
 ]
