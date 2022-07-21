@@ -6,9 +6,9 @@ import Team from '../models/teamModel.js'
 // @route POST /api/team
 // @access Private/User
 const createTeam = asyncHandler(async (req, res) => {
-  const { teamName: name, ...data } = req.body
+  const { name, administrator, ...data } = req.body
 
-  const team = await Team.create({ name })
+  const team = await Team.create({ name, administrator })
 
   const repository = await Repository.create(data)
 
