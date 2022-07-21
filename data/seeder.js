@@ -33,6 +33,20 @@ const destroyData = async () => {
   }
 }
 
+const seedData = async () => {
+  try {
+    await destroyData()
+
+    console.log('Data Imported!'.green)
+    process.exit()
+  } catch (error) {
+    console.error(`${error}`.red)
+    process.exit(1)
+  }
+}
+
 if (process.argv[2] === '-d') {
   destroyData()
+} else {
+  seedData()
 }
