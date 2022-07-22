@@ -172,9 +172,9 @@ const getTeamsByUserId = asyncHandler(async (req, res) => {
     })
     .exec()
 
-  console.log(user)
+  const { teams } = user
 
-  res.status(200).json(user)
+  res.status(200).json(teams)
 })
 
 export {
