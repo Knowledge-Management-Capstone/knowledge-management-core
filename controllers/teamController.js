@@ -76,6 +76,9 @@ const updateTeam = asyncHandler(async (req, res) => {
   }
 
   team.name = name
+  if (team.status === 'rejected') {
+    team.status = 'updated'
+  }
   const updatedTeam = team.save()
 
   res.status(204).json(updatedTeam)
