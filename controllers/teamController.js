@@ -68,20 +68,41 @@ const getTeamById = asyncHandler(async (req, res) => {
 // @access Private/User
 const updateTeam = asyncHandler(async (req, res) => {
   const team = await Team.findById(req.params.id)
-  const { name } = req.body
+  const repository = await Repository.findById(team.repository)
+  const { name, title, description, startDate, endDate } = req.body
 
   if (!team) {
     res.status(404)
     throw new Error('Team not found')
   }
 
+  console.log(req.body)
+
+  console.log(team)
+  console.log(repository)
+
   team.name = name
   if (team.status === 'rejected') {
     team.status = 'updated'
   }
-  const updatedTeam = team.save()
 
-  res.status(204).json(updatedTeam)
+  repository.title = title
+  repository.description = description
+  repository.startDate = startDate
+  repository.endDate = endDate
+
+  const [updatedTeam, updatedRepository] = await Promise.all([
+    team.save(),
+    repository.save()
+  ])
+
+  res.status(204).json({
+    name: updatedTeam.name,
+    status: updatedTeam.status,
+    description: updatedRepository.description,
+    startDate: updatedRepository.startDate,
+    endDate: updatedRepository.endDate
+  })
 })
 
 // @desc Add Member to Team
