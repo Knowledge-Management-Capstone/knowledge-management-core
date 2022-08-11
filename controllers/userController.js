@@ -168,8 +168,6 @@ const searchUser = asyncHandler(async (req, res) => {
 const getTeamsByUserId = asyncHandler(async (req, res) => {
   let status = req.query.accepted ? { $eq: 'accepted' } : { $ne: 'accepted' }
 
-  console.log(status)
-
   const teams = await Team.find({
     $or: [
       { administrator: { $eq: req.params.id } },
