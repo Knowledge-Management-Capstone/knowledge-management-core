@@ -64,6 +64,18 @@ const getTeams = asyncHandler(async (req, res) => {
 // @access Private/User
 const getTeamById = asyncHandler(async (req, res) => {
   const team = await Team.findById(req.params.id)
+    .populate({
+      path: 'repository',
+      select: ['description', 'startDate', 'endDate', 'title']
+    })
+    .populate({
+      path: 'administrator',
+      select: ['fullName', 'faculty', 'accountType']
+    })
+    .populate({
+      path: 'members',
+      select: ['fullName', 'faculty', 'accountType']
+    })
 
   if (!team) {
     res.status(404)
