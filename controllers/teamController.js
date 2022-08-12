@@ -144,15 +144,13 @@ const addMember = asyncHandler(async (req, res) => {
 
 /**
  * @desc Delete Member from Team
- * @route DELETE /api/team/:id/member
+ * @route DELETE /api/team/:teamId/member/:memberId
  * @access Private/User
  */
 const deleteMember = asyncHandler(async (req, res) => {
-  const userId = req.body.userId
-
-  await Team.findByIdAndUpdate(req.params.id, {
-    $$pull: {
-      members: userId
+  await Team.findByIdAndUpdate(req.params.teamId, {
+    $pull: {
+      members: req.params.memberId
     }
   })
 
