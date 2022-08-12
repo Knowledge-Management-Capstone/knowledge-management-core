@@ -128,7 +128,7 @@ const updateTeam = asyncHandler(async (req, res) => {
 })
 
 // @desc Add Member to Team
-// @route PUT /api/team/:id/add
+// @route PUT /api/team/:id/member
 // @access Private/User
 const addMember = asyncHandler(async (req, res) => {
   const userId = req.body.userId
@@ -140,6 +140,23 @@ const addMember = asyncHandler(async (req, res) => {
   })
 
   res.status(201).json(team)
+})
+
+/**
+ * @desc Delete Member from Team
+ * @route DELETE /api/team/:id/member
+ * @access Private/User
+ */
+const deleteMember = asyncHandler(async (req, res) => {
+  const userId = req.body.userId
+
+  await Team.findByIdAndUpdate(req.params.id, {
+    $$pull: {
+      members: userId
+    }
+  })
+
+  res.status(204).json({ message: 'Member deleted successfully' })
 })
 
 /**
@@ -161,5 +178,6 @@ export {
   getTeams,
   updateTeam,
   addMember,
+  deleteMember,
   deleteTeam
 }
