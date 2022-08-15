@@ -175,6 +175,8 @@ const getTeamsByUserId = asyncHandler(async (req, res) => {
     ],
     status
   })
+    .populate({ path: 'members', select: 'fullName faculty accountType' })
+    .populate({ path: 'repository', select: 'startDate endDate title' })
 
   console.log(teams)
 
