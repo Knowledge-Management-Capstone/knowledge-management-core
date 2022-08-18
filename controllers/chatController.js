@@ -14,7 +14,7 @@ const sendMessage = asyncHandler(async (req, res) => {
   const message = await Message.create({ text, sender: senderId })
   await Chat.findByIdAndUpdate(id, {
     $push: {
-      message: message._id
+      messages: message._id
     }
   })
 
