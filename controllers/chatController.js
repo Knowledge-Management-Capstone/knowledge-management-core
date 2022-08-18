@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler'
-import Team from '../models/teamModel.js'
+import Chat from '../models/chatModel.js'
 import Message from '../models/messageModel.js'
 
 /**
@@ -12,7 +12,7 @@ const sendMessage = asyncHandler(async (req, res) => {
   const { id } = req.params
 
   const message = await Message.create({ text, sender: senderId })
-  await Team.findByIdAndUpdate(id, {
+  await Chat.findByIdAndUpdate(id, {
     $push: {
       message: message._id
     }
@@ -21,12 +21,16 @@ const sendMessage = asyncHandler(async (req, res) => {
   res.status(200).send({ message: 'message sent successfully' })
 })
 
+/**
+ * @desc Get All Messages
+ * @route GET /api/chat/:id
+ * @access Private/User
+ */
 const getAllMessages = asyncHandler(async (req, res) => {
   const { id } = req.params
 
-  const { messages } = await Team.findById(id).populate({
-    path: 'message',
-    // TODO: reduce nested populate by extract messages to MessageModel
+  const { messages } = await Chat.findById(id).populate({
+    path: 'messages',
     populate: {
       path: 'sender'
     }

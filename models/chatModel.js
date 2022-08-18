@@ -1,14 +1,14 @@
-import { Schema, model } from 'mongoose'
+import mongoose from 'mongoose'
 
-const chatSchema = Schema(
+const chatSchema = mongoose.Schema(
   {
     team: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Team'
     },
     messages: [
       {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Message'
       }
     ]
@@ -18,6 +18,6 @@ const chatSchema = Schema(
   }
 )
 
-const Chat = model('Chat', chatSchema)
+const Chat = mongoose.model('Chat', chatSchema)
 
 export default Chat
