@@ -32,7 +32,8 @@ const getAllMessages = asyncHandler(async (req, res) => {
   const { messages } = await Chat.findById(id).populate({
     path: 'messages',
     populate: {
-      path: 'sender'
+      path: 'sender',
+      select: ['fullName']
     }
   })
 
