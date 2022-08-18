@@ -8,10 +8,10 @@ import Message from '../models/messageModel.js'
  * @access Private/User
  */
 const sendMessage = asyncHandler(async (req, res) => {
-  const { text, senderId } = req.body
+  const { text, sender } = req.body
   const { id } = req.params
 
-  const message = await Message.create({ text, sender: senderId })
+  const message = await Message.create({ text, sender })
   await Chat.findByIdAndUpdate(id, {
     $push: {
       messages: message._id
