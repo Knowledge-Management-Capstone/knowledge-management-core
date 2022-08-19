@@ -1,4 +1,5 @@
 import express from 'express'
+import { Server } from 'socket.io'
 import cors from 'cors'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
@@ -44,4 +45,16 @@ app.use('/api/chat', chatRoute)
 app.use(notFound)
 app.use(errorHandler)
 
-app.listen(PORT, console.log(`Server is running on port ${PORT}`.yellow.bold))
+const server = app.listen(
+  PORT,
+  console.log(`Server is running on port ${PORT}`.yellow.bold)
+)
+
+const io = new Server(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: 'http://localhost:8000'
+  }
+})
+
+io.on('connection', socket => {})
