@@ -57,4 +57,18 @@ const io = new Server(server, {
   }
 })
 
-io.on('connection', socket => {})
+io.on('connection', socket => {
+  console.log('Connected to socket.io')
+
+  socket.emit('chat', {
+    text: 'hi',
+    sender: {
+      _id: 123,
+      fullName: 'Dian Rahmaji'
+    }
+  })
+
+  socket.on('disconnect', () => {
+    console.log('disconected')
+  })
+})

@@ -12,13 +12,15 @@ const sendMessage = asyncHandler(async (req, res) => {
   const { id } = req.params
 
   const message = await Message.create({ text, sender })
+  await message.populate({ path: 'sender', select: ['_id', 'fullName'] })
+
   await Chat.findByIdAndUpdate(id, {
     $push: {
       messages: message._id
     }
   })
 
-  res.status(200).send({ message: 'message sent successfully' })
+  res.status(200).send({ message })
 })
 
 /**
