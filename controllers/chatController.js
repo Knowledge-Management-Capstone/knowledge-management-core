@@ -1,27 +1,5 @@
 import asyncHandler from 'express-async-handler'
 import Chat from '../models/chatModel.js'
-import Message from '../models/messageModel.js'
-
-/**
- * @desc Send Message
- * @route POST /api/chat/:id
- * @access Private/User
- */
-const sendMessage = asyncHandler(async (req, res) => {
-  const { text, sender } = req.body
-  const { id } = req.params
-
-  const message = await Message.create({ text, sender })
-  await message.populate({ path: 'sender', select: ['_id', 'fullName'] })
-
-  await Chat.findByIdAndUpdate(id, {
-    $push: {
-      messages: message._id
-    }
-  })
-
-  res.status(200).send({ message })
-})
 
 /**
  * @desc Get All Messages
