@@ -10,7 +10,11 @@ import User from "../models/userModel.js";
 const createTeam = asyncHandler(async (req, res) => {
   const { name, administrator, ...data } = req.body;
 
-  const team = await Team.create({ name, administrator });
+  const team = await Team.create({
+    name,
+    administrator,
+    members: [administrator],
+  });
 
   const repository = await Repository.create(data);
   const chat = await Chat.create({});
