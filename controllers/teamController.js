@@ -12,7 +12,7 @@ const createTeam = asyncHandler(async (req, res) => {
 
   const team = await Team.create({
     name,
-    administrator,
+    administrators: [administrator],
     members: [administrator],
   });
 
