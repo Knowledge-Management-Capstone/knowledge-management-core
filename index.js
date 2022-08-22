@@ -15,6 +15,9 @@ import folderRoute from './routes/folderRoute.js'
 import documentRoute from './routes/documentRoute.js'
 import chatRoute from './routes/chatRoute.js'
 
+import Chat from './models/chatModel.js'
+import Message from './models/messageModel.js'
+
 dotenv.config()
 
 const PORT = process.env.PORT || 5000
@@ -57,15 +60,25 @@ const io = new Server(server, {
   }
 })
 
+// TODO: Move this code somewhere
 io.on('connection', socket => {
   console.log('Connected to socket.io')
 
-  socket.emit('chat', {
-    text: 'hi',
-    sender: {
-      _id: 123,
-      fullName: 'Dian Rahmaji'
-    }
+  socket.on('join_room', roomId => {
+    socket.join(roomId)
+    console.log('User joins', roomId)
+    socket.emit('joined_room')
+  })
+
+  socket.on('send_message', async (roomId, { text, sender }) => {
+    const message = await Message.create({ text, sender })
+    await Chat.findByIdAndUpdate(roomId, {
+      $push: {
+        message: message._id
+      }
+    })
+
+    socket.broadcast.to(roomId).emit('receive_message', message)
   })
 
   socket.on('disconnect', () => {
