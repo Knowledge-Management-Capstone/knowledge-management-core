@@ -20,4 +20,4 @@ const getAllMessages = asyncHandler(async (req, res) => {
   res.status(200).json(messages)
 })
 
-export { sendMessage, getAllMessages }
+export { getAllMessages }
