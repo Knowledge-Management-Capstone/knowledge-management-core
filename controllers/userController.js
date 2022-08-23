@@ -1,4 +1,6 @@
 import asyncHandler from "express-async-handler";
+import mongoose from "mongoose";
+
 import generateToken from "../utils/generateToken.js";
 import User from "../models/userModel.js";
 import Team from "../models/teamModel.js";
@@ -168,26 +170,67 @@ const searchUser = asyncHandler(async (req, res) => {
 const getTeamsByUserId = asyncHandler(async (req, res) => {
   const status = req.query.accepted ? { $eq: "accepted" } : { $ne: "accepted" };
 
-  const $or = [
-    { administrator: { $eq: req.params.id } },
-    { members: { $in: [req.params.id] } },
-  ];
-
-  let query = { $or };
+  let query = { members: { $in: [mongoose.Types.ObjectId(req.params.id)] } };
 
   if (!req.query.all) {
-    query = { ...query, status };
+    query = { $and: [query, { status }] };
   }
 
-  const teams = await Team.find(query)
-    .populate({
-      path: "members",
-      select: ["fullName", "email", "faculty", "accountType"],
-    })
-    .populate({
-      path: "repository",
-      select: "startDate endDate title description",
-    });
+  const teams = await Team.aggregate([
+    { $match: query },
+    {
+      $lookup: {
+        from: "repositories",
+        foreignField: "_id",
+        localField: "repository",
+        as: "repository",
+      },
+    },
+    { $unwind: "$repository" },
+    {
+      $lookup: {
+        from: "users",
+        foreignField: "_id",
+        localField: "members",
+        as: "members",
+      },
+    },
+    {
+      $addFields: {
+        members: {
+          $map: {
+            input: "$members",
+            as: "item",
+            in: {
+              $cond: [
+                { $in: ["$$item._id", "$administrators"] },
+                { $mergeObjects: ["$$item", { isAdmin: true }] },
+                { $mergeObjects: ["$$item", { isAdmin: false }] },
+              ],
+            },
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        chat: 1,
+        name: 1,
+        status: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        repository: 1,
+        administrators: 1,
+        "members._id": 1,
+        "members.email": 1,
+        "members.fullName": 1,
+        "members.faculty": 1,
+        "members.accountType": 1,
+        "members.isAdmin": 1,
+      },
+    },
+  ]);
 
   res.status(200).json(teams);
 });
