@@ -58,6 +58,7 @@ const aggregations = (query) => [
 ];
 
 export const populateTeams = async (query) => {
+  // FIXME: this is necessary
   const customAggregations = aggregations(query).map((aggregation) =>
     aggregation.hasOwnProperty("$project")
       ? {
