@@ -120,7 +120,7 @@ const updateTeam = asyncHandler(async (req, res) => {
 });
 
 // @desc Add Member to Team
-// @route PUT /api/team/:id/member
+// @route POST /api/team/:id/member
 // @access Private/User
 const addMember = asyncHandler(async (req, res) => {
   const { teamId, memberId } = req.params;
@@ -147,6 +147,9 @@ const addMember = asyncHandler(async (req, res) => {
   res.status(201).json(team);
 });
 
+// @desc Update Member from Team
+// @route PUT /api/team/:id/member
+// @access Private/User
 const updateMember = asyncHandler(async (req, res) => {
   const { teamId, memberId } = req.params;
   const { role } = req.query;
