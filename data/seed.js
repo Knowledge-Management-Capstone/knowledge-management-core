@@ -19,17 +19,21 @@ dotenv.config();
 
 connectDB();
 
+function dataDestroyer() {
+  return Promise.all([
+    Chat.deleteMany({}),
+    Document.deleteMany({}),
+    Folder.deleteMany({}),
+    Message.deleteMany({}),
+    Repository.deleteMany({}),
+    Team.deleteMany({}),
+    User.deleteMany({}),
+  ]);
+}
+
 const destroyData = async () => {
   try {
-    await Promise.all([
-      Chat.deleteMany({}),
-      Document.deleteMany({}),
-      Folder.deleteMany({}),
-      Message.deleteMany({}),
-      Repository.deleteMany({}),
-      Team.deleteMany({}),
-      User.deleteMany({}),
-    ]);
+    await dataDestroyer();
 
     console.log("Data Destroyed!".red);
     process.exit();
@@ -41,8 +45,7 @@ const destroyData = async () => {
 
 const seedData = async () => {
   try {
-    await destroyData();
-
+    await dataDestroyer();
     await User.create(users);
 
     console.log("Data Imported!".green);
