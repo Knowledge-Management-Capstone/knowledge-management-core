@@ -147,6 +147,33 @@ const addMember = asyncHandler(async (req, res) => {
   res.status(201).json(team);
 });
 
+const updateMember = asyncHandler(async (req, res) => {
+  const { teamId, memberId } = req.params;
+  const { role } = req.query;
+
+  let query;
+
+  if (role === "administrator") {
+    query = {
+      $push: {
+        administrators: memberId,
+      },
+    };
+  }
+
+  if (role === "researcher") {
+    query = {
+      $pull: {
+        administrators: memberId,
+      },
+    };
+  }
+
+  const team = await Team.findByIdAndUpdate(teamId, query);
+
+  res.status(201).json(team);
+});
+
 /**
  * @desc Delete Member from Team
  * @route DELETE /api/team/:teamId/member/:memberId
@@ -178,10 +205,11 @@ const deleteTeam = asyncHandler(async (req, res) => {
 export {
   createTeam,
   approveTeam,
-  getTeamById,
   getTeams,
+  getTeamById,
   updateTeam,
-  addMember,
-  deleteMember,
   deleteTeam,
+  addMember,
+  updateMember,
+  deleteMember,
 };
