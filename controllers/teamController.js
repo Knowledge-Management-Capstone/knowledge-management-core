@@ -158,7 +158,7 @@ const updateMember = asyncHandler(async (req, res) => {
 
   if (role === "administrator") {
     query = {
-      $push: {
+      $addToSet: {
         administrators: memberId,
       },
     };
