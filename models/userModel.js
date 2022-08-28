@@ -11,6 +11,13 @@ const userSchema = mongoose.Schema(
     accountType: { type: String, required: true },
     password: { type: String, required: true },
     isApproved: { type: Boolean, required: true, default: false },
+    pictureUrl: { type: String },
+    specialities: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
     teams: [
       {
         type: mongoose.Schema.Types.ObjectId,
