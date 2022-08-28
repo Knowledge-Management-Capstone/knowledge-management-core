@@ -7,7 +7,6 @@
     "major": "Information Technology",
     "accountType": "lecturer",
     "password": "admin123",
-    "isAdmin": true,
     "isApproved": true
   },
   {
@@ -18,7 +17,6 @@
     "major": "Information Technology",
     "accountType": "lecturer",
     "password": "lectuter",
-    "isAdmin": false,
     "isApproved": true
   },
   {
@@ -30,7 +28,14 @@
     "accountType": "student",
     "password": "dianrahmaji",
     "isAdmin": false,
-    "isApproved": true
+    "isApproved": true,
+    "specialities": [
+      "Reactjs",
+      "Vuejs",
+      "Expressjs",
+      "MongoDB",
+      "Typescript"
+    ]
   },
   {
     "fullName": "Dzakiy Harissalam",
@@ -40,7 +45,6 @@
     "major": "Information Technology",
     "accountType": "student",
     "password": "dzakiyharissalam",
-    "isAdmin": false,
     "isApproved": true
   }
 ]
