@@ -10,6 +10,7 @@ const userSchema = mongoose.Schema(
     major: { type: String, required: true },
     accountType: { type: String, required: true },
     password: { type: String, required: true },
+    isAdmin: { type: String, required: true, default: false },
     isApproved: { type: Boolean, required: true, default: false },
     pictureUrl: { type: String },
     specialities: [
