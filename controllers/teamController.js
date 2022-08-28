@@ -12,22 +12,28 @@ import User from "../models/userModel.js";
 // @route POST /api/team
 // @access Private/User
 const createTeam = asyncHandler(async (req, res) => {
-  const { name, administrator, ...data } = req.body;
+  const { name, creator, description, title, startDate, endDate } = req.body;
 
   const team = await Team.create({
     name,
-    administrators: [administrator],
-    members: [administrator],
+    description,
+    administrators: [creator],
+    members: [creator],
   });
 
-  const repository = await Repository.create(data);
+  const repository = await Repository.create({
+    title,
+    startDate,
+    endDate,
+  });
+
   const chat = await Chat.create({});
 
   team.repository = repository;
   team.chat = chat;
   await team.save();
 
-  await User.findByIdAndUpdate(administrator, {
+  await User.findByIdAndUpdate(creator, {
     $push: {
       teams: team._id,
     },
