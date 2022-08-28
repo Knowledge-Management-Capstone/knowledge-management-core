@@ -47,6 +47,7 @@ const aggregations = (query) => [
       createdAt: 1,
       updatedAt: 1,
       repository: 1,
+      description: 1,
       "members._id": 1,
       "members.email": 1,
       "members.fullName": 1,

@@ -14,7 +14,7 @@ import User from "../models/userModel.js";
 const createTeam = asyncHandler(async (req, res) => {
   const { name, creator, description, title, startDate, endDate } = req.body;
 
-  const team = await Team.create({
+  let team = await Team.create({
     name,
     description,
     administrators: [creator],
@@ -39,7 +39,15 @@ const createTeam = asyncHandler(async (req, res) => {
     },
   });
 
-  res.status(201).json(repository);
+  const query = {
+    _id: { $eq: team._id },
+  };
+
+  team = await populateTeamsByUser(query, creator);
+  console.log(team);
+
+  // TODO: use $unwind instead
+  res.status(201).json(team[0]);
 });
 
 /**
@@ -73,10 +81,11 @@ const getTeams = asyncHandler(async (req, res) => {
 // @desc Get Team by Id
 // @route GET /api/team/:id
 // @access Private/User
+// FIXME: Problems with the query
 const getTeamById = asyncHandler(async (req, res) => {
   const userId = mongoose.Types.ObjectId(req.params.id);
   const query = {
-    $id: { $eq: userId },
+    _id: { $eq: userId },
   };
   const team = await populateTeamsByUser(query, userId);
 
