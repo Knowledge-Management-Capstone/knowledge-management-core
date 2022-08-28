@@ -44,7 +44,6 @@ const createTeam = asyncHandler(async (req, res) => {
   };
 
   team = await populateTeamsByUser(query, creator);
-  console.log(team);
 
   // TODO: use $unwind instead
   res.status(201).json(team[0]);
