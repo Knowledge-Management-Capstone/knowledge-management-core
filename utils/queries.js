@@ -44,6 +44,7 @@ const aggregations = (query) => [
       chat: 1,
       name: 1,
       status: 1,
+      topics: 1,
       createdAt: 1,
       updatedAt: 1,
       repository: 1,
