@@ -9,6 +9,7 @@ const teamSchema = mongoose.Schema(
       default: "pending",
       required: true,
     },
+    description: { type: String, required: true },
     repository: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Repository",
