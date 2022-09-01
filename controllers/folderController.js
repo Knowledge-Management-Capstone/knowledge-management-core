@@ -6,11 +6,11 @@ import Folder from "../models/folderModel.js";
 // @route POST /api/folder
 // @access Private/User
 const createFolder = asyncHandler(async (req, res) => {
-  const { parentId, title, description, authorId } = req.body;
+  const { parentId, title, note, authorId } = req.body;
 
   const folder = await Folder.create({
     title: title ?? "root",
-    description,
+    note,
     author: authorId,
   });
 
