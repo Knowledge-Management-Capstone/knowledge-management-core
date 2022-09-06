@@ -27,23 +27,14 @@ const createFolder = asyncHandler(async (req, res) => {
   res.status(201).json(folder);
 });
 
-// @desc Get All Children from Folder by Folder Id
-// @route GET /api/folder/:id
-// @access Private/User
-const getAllChildrenById = asyncHandler(async (req, res) => {
-  const children = await Folder.findById(req.params.id)
-    .populate({
-      path: "documents",
-      select: ["_id", "title"],
-    })
-    .populate({
-      path: "folders",
-      select: ["_id", "title"],
-    })
-    .populate({ path: "authors", select: "fullName" })
-    .exec();
-
-  res.status(200).json(children);
+/**
+ * @desc Get Current Folder By Id
+ *  @route GET /api/folder/:id
+ *  @access Private/User
+ */
+const getFolderById = asyncHandler(async (req, res) => {
+  const folder = await Folder.findById(req.params.id);
+  res.status(200).json(folder);
 });
 
 // @desc Update Folder by Id
@@ -90,4 +81,4 @@ const deleteFolder = asyncHandler(async (req, res) => {
   res.status(204).json({ message: "Folder deleted successfully" });
 });
 
-export { createFolder, getAllChildrenById, updateFolder, deleteFolder };
+export { createFolder, getFolderById, updateFolder, deleteFolder };
