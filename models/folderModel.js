@@ -2,9 +2,15 @@ import mongoose from "mongoose";
 
 const folderSchema = mongoose.Schema(
   {
-    title: { type: String, required: true },
+    name: { type: String, required: true }, // TODO: rename to name
     note: { type: String, required: true },
     description: { type: String },
+    status: {
+      type: String,
+      required: true,
+      enum: ["ongoing", "draft", "done", "critical"],
+      default: "ongoing",
+    },
     documents: [
       {
         type: mongoose.Schema.Types.ObjectId,

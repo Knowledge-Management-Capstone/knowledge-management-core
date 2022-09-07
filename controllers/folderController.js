@@ -33,7 +33,13 @@ const createFolder = asyncHandler(async (req, res) => {
  *  @access Private/User
  */
 const getFolderById = asyncHandler(async (req, res) => {
-  const folder = await Folder.findById(req.params.id);
+  const folder = await Folder.findById(req.params.id)
+    .populate({
+      path: "folders",
+      select: ["name", "description", "status"],
+    })
+    .populate({ path: "documents" });
+
   res.status(200).json(folder);
 });
 
