@@ -36,9 +36,21 @@ const getFolderById = asyncHandler(async (req, res) => {
   const folder = await Folder.findById(req.params.id)
     .populate({
       path: "folders",
-      select: ["name", "description", "status"],
+      select: [
+        "name",
+        "description",
+        "status",
+        "createdAt",
+        "updatedAt",
+        "authors",
+      ],
+      populate: { path: "authors", select: ["fullName", "email"] },
     })
-    .populate({ path: "documents" });
+    .populate({ path: "authors", select: ["fullName", "email"] })
+    .populate({
+      path: "documents",
+      populate: { path: "authors", select: ["fullName", "email"] },
+    });
 
   res.status(200).json(folder);
 });
