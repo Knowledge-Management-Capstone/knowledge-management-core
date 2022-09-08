@@ -67,9 +67,10 @@ const updateFolder = asyncHandler(async (req, res) => {
     throw new Error("Folder not found");
   }
 
-  const { title, description } = req.body;
+  const { name, status, description } = req.body;
 
-  folder.title = title;
+  folder.name = name;
+  folder.status = status;
   folder.description = description;
 
   const updatedFolder = await folder.save();
