@@ -86,14 +86,16 @@ const updateFolder = asyncHandler(async (req, res) => {
  * @access Private/User
  */
 const updateFolderNote = asyncHandler(async (req, res) => {
-  const { note, authorId } = req.body;
+  const { content, authorId } = req.body;
 
-  let folder = await Folder.findByIdAndUpdate(req.params.id, {
-    note,
-    $addToSet: { authors: authorId },
-  });
-
-  folder = await folder
+  const folder = await Folder.findByIdAndUpdate(
+    req.params.id,
+    {
+      note: content,
+      $addToSet: { authors: authorId },
+    },
+    { new: true },
+  )
     .select(["note", "authors"])
     .populate({ path: "authors", select: ["fullName", "email"] });
 
