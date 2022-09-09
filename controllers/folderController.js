@@ -80,6 +80,26 @@ const updateFolder = asyncHandler(async (req, res) => {
   res.status(200).json(updatedFolder);
 });
 
+/**
+ * @desc Update Folder Note By Id
+ * @route PUT /api/folder/:id/note
+ * @access Private/User
+ */
+const updateFolderNote = asyncHandler(async (req, res) => {
+  const { note, authorId } = req.body;
+
+  let folder = await Folder.findByIdAndUpdate(req.params.id, {
+    note,
+    $addToSet: { authors: authorId },
+  });
+
+  folder = await folder
+    .select(["note", "authors"])
+    .populate({ path: "authors", select: ["fullName", "email"] });
+
+  res.status(201).send(folder);
+});
+
 // @desc Delete Folder by Id
 // @route DELETE /api/folder/:id
 // @access Private/User
@@ -104,4 +124,10 @@ const deleteFolder = asyncHandler(async (req, res) => {
   res.status(204).json({ message: "Folder deleted successfully" });
 });
 
-export { createFolder, getFolderById, updateFolder, deleteFolder };
+export {
+  createFolder,
+  getFolderById,
+  updateFolder,
+  updateFolderNote,
+  deleteFolder,
+};
