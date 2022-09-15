@@ -48,6 +48,7 @@ const getFolderById = asyncHandler(async (req, res) => {
         startWith: "$parent",
         connectFromField: "parent",
         connectToField: "_id",
+        depthField: "level",
         as: "parents",
       },
     },
@@ -99,11 +100,6 @@ const getFolderById = asyncHandler(async (req, res) => {
       },
     },
     {
-      $addFields: {
-        parents: { $reverseArray: "$parents" },
-      },
-    },
-    {
       $project: {
         name: 1,
         note: 1,
@@ -114,6 +110,7 @@ const getFolderById = asyncHandler(async (req, res) => {
 
         "parents._id": 1,
         "parents.name": 1,
+        "parents.level": 1,
 
         "authors._id": 1,
         "authors.email": 1,
@@ -151,7 +148,7 @@ const getFolderById = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Folder not found");
   }
-  console.log(folder[0]);
+
   res.status(200).json(folder[0]);
 });
 
