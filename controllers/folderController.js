@@ -99,6 +99,11 @@ const getFolderById = asyncHandler(async (req, res) => {
       },
     },
     {
+      $addFields: {
+        parents: { $reverseArray: "$parents" },
+      },
+    },
+    {
       $project: {
         name: 1,
         note: 1,
@@ -146,7 +151,7 @@ const getFolderById = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Folder not found");
   }
-
+  console.log(folder[0]);
   res.status(200).json(folder[0]);
 });
 
