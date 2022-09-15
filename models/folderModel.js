@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const folderSchema = mongoose.Schema(
   {
-    name: { type: String, required: true }, // TODO: rename to name
+    name: { type: String, required: true },
     note: { type: String, required: true },
     description: { type: String },
     status: {
@@ -18,7 +18,6 @@ const folderSchema = mongoose.Schema(
       },
     ],
     authors: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    // TODO: Let's see if this is necessary 🤔
     folders: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -34,10 +33,6 @@ const folderSchema = mongoose.Schema(
     timestamps: true,
   },
 );
-
-// folderSchema.add({
-//   folders: [folderSchema],
-// });
 
 const Folder = mongoose.model("Folder", folderSchema);
 
