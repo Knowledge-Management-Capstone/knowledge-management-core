@@ -18,12 +18,17 @@ const folderSchema = mongoose.Schema(
       },
     ],
     authors: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    // TODO: Let's see if this is necessary 🤔
     folders: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Folder",
       },
     ],
+    parent: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Folder",
+    },
   },
   {
     timestamps: true,

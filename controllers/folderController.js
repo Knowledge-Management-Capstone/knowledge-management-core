@@ -15,6 +15,7 @@ const createFolder = asyncHandler(async (req, res) => {
     note,
     description,
     authors: authorId,
+    parent: parentId,
   });
 
   await Folder.findByIdAndUpdate(parentId, {
