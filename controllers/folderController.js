@@ -64,36 +64,38 @@ const getFolderById = asyncHandler(async (req, res) => {
     {
       $lookup: {
         from: "folders",
-        foreignField: "_id",
-        localField: "folders",
+        let: { folders: "$folders" },
+        pipeline: [
+          { $match: { $expr: { $in: ["$_id", "$$folders"] } } },
+          {
+            $lookup: {
+              from: "users",
+              let: { authors: "$authors" },
+              pipeline: [{ $match: { $expr: { $in: ["$_id", "$$authors"] } } }],
+              as: "authors",
+            },
+          },
+        ],
         as: "folders",
-      },
-    },
-    { $unwind: "$folders" },
-    {
-      $lookup: {
-        from: "users",
-        foreignField: "_id",
-        localField: "folders.authors",
-        as: "folders.authors",
       },
     },
     /** Documents */
     {
       $lookup: {
         from: "documents",
-        foreignField: "_id",
-        localField: "documents",
+        let: { documents: "$documents" },
+        pipeline: [
+          { $match: { $expr: { $in: ["$_id", "$$documents"] } } },
+          {
+            $lookup: {
+              from: "users",
+              let: { authors: "$authors" },
+              pipeline: [{ $match: { $expr: { $in: ["$_id", "$$authors"] } } }],
+              as: "authors",
+            },
+          },
+        ],
         as: "documents",
-      },
-    },
-    { $unwind: "$documents" },
-    {
-      $lookup: {
-        from: "users",
-        foreignField: "_id",
-        localField: "documents.authors",
-        as: "documents.authors",
       },
     },
     {
@@ -127,6 +129,7 @@ const getFolderById = asyncHandler(async (req, res) => {
         "documents.description": 1,
         "documents.extension": 1,
         "documents.size": 1,
+        "documents.status": 1,
         "documents.url": 1,
         "documents.craftingTime": 1,
         "documents.storageDir": 1,
