@@ -25,20 +25,6 @@ export default function createSocketServer(app) {
 
     socket.on("join_room", (roomId) => {
       socket.join(roomId);
-
-      // console.log("rooms", socket.rooms);
-
-      // socket.rooms.forEach((room) => {
-      //   console.log("members in", room);
-      //   io.in(room)
-      //     .allSockets()
-      //     .then((members) => console.log(members));
-      // });
-
-      // io.in(roomId)
-      //   .allSockets()
-      //   .then((members) => console.log(members));
-      // console.log("User joins", roomId);
       socket.emit("joined_room");
     });
 
