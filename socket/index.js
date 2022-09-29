@@ -23,16 +23,10 @@ export default function createSocketServer(app) {
     socket.removeAllListeners();
     console.log("Connected to socket.io");
 
-    socket.on("join_room", (roomId) => {
-      socket.join(roomId);
-      socket.emit("joined_room");
-    });
-
     socket.on("send_message", async (roomId, { body, sender }) => {
       const message = await Message.create({ body, sender });
       await Chat.findByIdAndUpdate(roomId, {
         $push: {
-          // eslint-disable-next-line no-underscore-dangle
           messages: message._id,
         },
       });
