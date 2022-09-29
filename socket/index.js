@@ -28,9 +28,8 @@ export default function createSocketServer(app) {
       socket.emit("joined_room");
     });
 
-    socket.on("send_message", async (roomId, { text, sender }) => {
-      console.log(text);
-      const message = await Message.create({ text, sender });
+    socket.on("send_message", async (roomId, { body, sender }) => {
+      const message = await Message.create({ body, sender });
       await Chat.findByIdAndUpdate(roomId, {
         $push: {
           // eslint-disable-next-line no-underscore-dangle
