@@ -23,8 +23,9 @@ export default function createSocketServer(app) {
     socket.removeAllListeners();
     console.log("Connected to socket.io");
 
-    socket.on("send_message", async (roomId, { body, sender }) => {
-      const message = await Message.create({ body, sender });
+    socket.on("send_message", async (roomId, { body, sender, type, url }) => {
+      const message = await Message.create({ body, sender, type, url });
+      console.log(message);
       await Chat.findByIdAndUpdate(roomId, {
         $push: {
           messages: message._id,
