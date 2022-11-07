@@ -7,7 +7,6 @@ const documentSchema = mongoose.Schema(
     extension: {
       type: String,
       required: true,
-      enum: ["jpg", "jpeg", "pdf", "mp4", "docx", "xlsx", "txt"], // TODO: Add more types later
     },
     size: { type: Number, required: true }, // in Bytes
     url: { type: String, required: true },
@@ -22,7 +21,14 @@ const documentSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    // TODO: Remove this field
     authors: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    contributions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Contribution",
+      },
+    ],
   },
   {
     timestamps: true,
