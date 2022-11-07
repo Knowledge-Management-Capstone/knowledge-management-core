@@ -16,6 +16,7 @@ const contributionSchema = mongoose.Schema({
   contribution: {
     type: Number,
     required: true,
+    default: 0,
   },
 });
 
