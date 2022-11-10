@@ -10,6 +10,7 @@ const documentSchema = mongoose.Schema(
     },
     size: { type: Number, required: true }, // in Bytes
     url: { type: String, required: true },
+    // TODO: Remove this field
     craftingTime: { type: Number, required: true },
     status: {
       type: String,
