@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import Contribution from "../models/contributionModel";
+import Contribution from "../models/contributionModel.js";
 import Document from "../models/documentModel.js";
 import Folder from "../models/folderModel.js";
 
