@@ -16,8 +16,32 @@ const aggregations = (query) => [
   {
     $lookup: {
       from: "users",
-      foreignField: "_id",
-      localField: "members",
+      let: { members: "$members" },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $in: ["$_id", "$$members"],
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: "contributions",
+            let: { author: "$_id" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $eq: ["$author", "$$author"],
+                  },
+                },
+              },
+            ],
+            as: "contributions",
+          },
+        },
+      ],
       as: "members",
     },
   },
@@ -32,6 +56,52 @@ const aggregations = (query) => [
               { $in: ["$$item._id", "$administrators"] },
               { $mergeObjects: ["$$item", { isAdmin: true }] },
               { $mergeObjects: ["$$item", { isAdmin: false }] },
+            ],
+          },
+        },
+      },
+    },
+  },
+  {
+    $addFields: {
+      members: {
+        $map: {
+          input: "$members",
+          as: "member",
+          in: {
+            $mergeObjects: [
+              "$$member",
+              {
+                contributions: {
+                  $filter: {
+                    input: "$$member.contributions",
+                    as: "contribution",
+                    cond: {
+                      $eq: ["$repository._id", "$$contribution.repository"],
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  {
+    $addFields: {
+      members: {
+        $map: {
+          input: "$members",
+          as: "member",
+          in: {
+            $mergeObjects: [
+              "$$member",
+              {
+                contributions: {
+                  $sum: "$$member.contributions.contribution",
+                },
+              },
             ],
           },
         },
@@ -55,6 +125,7 @@ const aggregations = (query) => [
       "members.faculty": 1,
       "members.accountType": 1,
       "members.isAdmin": 1,
+      "members.contributions": 1,
     },
   },
 ];
