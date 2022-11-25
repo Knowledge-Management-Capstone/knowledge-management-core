@@ -119,6 +119,7 @@ const aggregations = (query) => [
       updatedAt: 1,
       repository: 1,
       description: 1,
+      contributions: 1,
       "members._id": 1,
       "members.email": 1,
       "members.fullName": 1,
@@ -148,30 +149,75 @@ export const populateTeams = async (query) => {
 };
 
 export const populateTeamsByUser = async (query, userId) => {
-  const customAggregations = aggregations(query).map((aggregation) =>
-    aggregation.hasOwnProperty("$addFields")
-      ? {
-          $addFields: {
-            ...aggregation.$addFields,
-            isAdmin: {
-              $cond: [
-                {
-                  $in: [userId, "$administrators"],
-                },
-                true,
-                false,
-              ],
+  const aggregationsWithQuery = aggregations(query);
+  const aggregationsLength = aggregationsWithQuery.length;
+
+  const aggregationsWithTotalContributions = [
+    ...aggregationsWithQuery.slice(0, aggregationsLength - 1),
+    {
+      $lookup: {
+        from: "contributions",
+        let: {
+          author: userId,
+          repository: "$repository._id",
+        },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  {
+                    $eq: ["$author", "$$author"],
+                  },
+                  {
+                    $eq: ["$repository", "$$repository"],
+                  },
+                ],
+              },
             },
           },
-        }
-      : aggregation.hasOwnProperty("$project")
-      ? {
-          $project: {
-            ...aggregation.$project,
-            isAdmin: 1,
-          },
-        }
-      : aggregation,
+        ],
+        as: "contributions",
+      },
+    },
+    {
+      $addFields: {
+        contributions: {
+          $sum: "$contributions.contribution",
+        },
+      },
+    },
+    ...aggregationsWithQuery.slice(aggregationsLength - 1, aggregationsLength),
+  ];
+  const customAggregations = aggregationsWithTotalContributions.map(
+    (aggregation) =>
+      aggregation.hasOwnProperty("$addFields")
+        ? aggregation.$addFields.hasOwnProperty("members")
+          ? {
+              ...aggregation,
+              $addFields: {
+                ...aggregation.$addFields,
+                isAdmin: {
+                  $cond: [
+                    {
+                      $in: [userId, "$administrators"],
+                    },
+                    true,
+                    false,
+                  ],
+                },
+              },
+            }
+          : aggregation
+        : aggregation.hasOwnProperty("$project")
+        ? {
+            $project: {
+              ...aggregation.$project,
+              isAdmin: 1,
+              contributions: 1,
+            },
+          }
+        : aggregation,
   );
 
   const teams = await Team.aggregate(customAggregations);
