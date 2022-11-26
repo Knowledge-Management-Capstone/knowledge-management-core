@@ -177,6 +177,16 @@ const updateTeam = asyncHandler(async (req, res) => {
     repository.save(),
   ]);
 
+  console.log(req.body);
+  console.log({
+    name: updatedTeam.name,
+    status: updatedTeam.status,
+    description: updatedTeam.description,
+    topics: updatedTeam.topics,
+    startDate: updatedRepository.startDate,
+    endDate: updatedRepository.endDate,
+  });
+
   res.status(204).json({
     name: updatedTeam.name,
     status: updatedTeam.status,
