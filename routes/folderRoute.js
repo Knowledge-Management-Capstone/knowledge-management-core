@@ -11,6 +11,7 @@ import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 router.route("/").post(protect, createFolder);
+router.route("/search/:id").get(getFolderById);
 router
   .route("/:id")
   .get(protect, getFolderById)
