@@ -76,6 +76,16 @@ const getFolderById = asyncHandler(async (req, res) => {
               as: "authors",
             },
           },
+          {
+            $lookup: {
+              from: "documents",
+              let: { documents: "$documents" },
+              pipeline: [
+                { $match: { $expr: { $in: ["$_id", "$$documents"] } } },
+              ],
+              as: "documents",
+            },
+          },
         ],
         as: "folders",
       },
@@ -151,6 +161,10 @@ const getFolderById = asyncHandler(async (req, res) => {
         "folders.authors._id": 1,
         "folders.authors.email": 1,
         "folders.authors.fullName": 1,
+        "folders.documents._id": 1,
+        "folders.documents.name": 1,
+        "folders.documents.url": 1,
+        "folders.documents.extension": 1,
 
         "documents._id": 1,
         "documents.name": 1,

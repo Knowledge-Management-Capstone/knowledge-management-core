@@ -294,9 +294,8 @@ const getTeamByString = asyncHandler(async (req, res) => {
 const getRepositoryByString = asyncHandler(async (req, res) => {
   const { searchText } = req.query;
 
-  const repositories = await Repository.find(
-    { $text: { $search: searchText } },
-    { score: { $meta: "textScore" } },
+  const repositories = await Repository.aggregate([
+    { $match: { $text: { $search: searchText } } },
     {
       $lookup: {
         from: "teams",
@@ -305,7 +304,8 @@ const getRepositoryByString = asyncHandler(async (req, res) => {
         as: "team",
       },
     },
-  ).sort({ score: { $meta: "textScore" } });
+    { $sort: { score: { $meta: "textScore" } } },
+  ]);
 
   res.status(200).json(repositories);
 });
