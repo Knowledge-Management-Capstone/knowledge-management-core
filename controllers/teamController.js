@@ -117,6 +117,7 @@ const createTeam = asyncHandler(async (req, res) => {
  * @desc Approve/Reject Team
  * @route PUT /api/team/:id?/approve?value={approve}
  * @access Private/Admin
+ * @deprecated Use `respondTeam` instead
  */
 const approveTeam = asyncHandler(async (req, res) => {
   const team = await Team.findById(req.params.id);
@@ -130,6 +131,28 @@ const approveTeam = asyncHandler(async (req, res) => {
   team.status = approval;
   const approvedTeam = team.save();
   res.status(200).json(approvedTeam);
+});
+
+/**
+ * @desc Approve/Reject Team
+ * @route PUT /api/team/:id/respond
+ * @access Private/Admin
+ */
+const respondTeam = asyncHandler(async (req, res) => {
+  const { review, approve } = req.body;
+
+  const team = await Team.findById(req.params.id);
+  if (!team) {
+    res.status(404);
+
+    throw new Error("Team not found");
+  }
+
+  const approval = approve ? "accepted" : "rejected";
+  team.status = approval;
+  team.review = review;
+  const responded = await team.save();
+  res.status(200).json(responded);
 });
 
 // @desc Get All Team
@@ -330,6 +353,7 @@ const getRepositoryById = asyncHandler(async (req, res) => {
 export {
   createTeam,
   approveTeam,
+  respondTeam,
   getTeams,
   getTeamById,
   updateTeam,
