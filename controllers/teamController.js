@@ -190,7 +190,8 @@ const getTeamById = asyncHandler(async (req, res) => {
 const updateTeam = asyncHandler(async (req, res) => {
   const team = await Team.findById(req.params.id);
   const repository = await Repository.findById(team.repository);
-  const { name, title, description, startDate, endDate, topics } = req.body;
+  const { name, title, description, document, startDate, endDate, topics } =
+    req.body;
 
   if (!team) {
     res.status(404);
@@ -200,6 +201,7 @@ const updateTeam = asyncHandler(async (req, res) => {
   team.name = name;
   team.description = description;
   team.topics = topics;
+  team.document = document;
   if (team.status === "rejected") {
     team.status = "updated";
   }
