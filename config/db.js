@@ -9,7 +9,7 @@ const connectDB = async () => {
       useNewUrlParser: true,
     };
 
-    const conn = await mongoose.connect(process.env.MONGODB_URI, options);
+    const conn = await mongoose.connect(`${process.env.MONGODB_URI}`, options);
 
     console.log(`MongoDB connected to ${conn.connection.host}`.cyan.underline);
   } catch (error) {
