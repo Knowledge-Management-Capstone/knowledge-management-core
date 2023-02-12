@@ -32,7 +32,7 @@ const createTeam = asyncHandler(async (req, res) => {
 
   const root = await Folder.create({
     name: title,
-    note: `<h1>${title}</h1><p>Click the edit note button!</p>`,
+    note: `<h1>${title}</h1><p>Klik Edit Catatan untuk mengubah Catatan!</p>`,
     description: "This is the root folder",
     authors: [creator],
   });
@@ -40,7 +40,7 @@ const createTeam = asyncHandler(async (req, res) => {
   const [sampleFolder, sampleDocument] = await Promise.all([
     Folder.create({
       name: "Sample Folder",
-      note: "<h1>Details Here...</h1><p>Click the edit note button!</p>",
+      note: "<h1>Details Here...</h1><p>Klik Edit Catatan untuk mengubah Catatan!</p>",
       description: "This is a sample folder",
       status: "ongoing",
       authors: [creator],

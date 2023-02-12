@@ -10,7 +10,7 @@ import Folder from "../models/folderModel.js";
 const createFolder = asyncHandler(async (req, res) => {
   const { authorId, description, name, parentId } = req.body;
 
-  const note = `<h1>${name}</h1><p>Click the edit note button!</p>`;
+  const note = `<h1>${name}</h1><p>Klik Button Edit Catatan untuk mengubah Catatan!</p>`;
 
   let folder = await Folder.create({
     name,
